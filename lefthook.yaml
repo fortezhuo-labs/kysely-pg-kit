@@ -1,0 +1,13 @@
+# lefthook.yml
+
+pre-commit:
+  commands:
+    # 1. Cek format & lint, lalu auto-fix, lalu git add lagi
+    biome-check:
+      glob: "*.{ts,js,json}"
+      run: pnpm biome check --apply --no-errors-on-unmatched {staged_files} && git add {staged_files}
+
+pre-push:
+  commands:
+    test:
+      run: pnpm vitest run
