@@ -8,8 +8,8 @@
     "declarationMap": true,
     "sourceMap": true,
     "outDir": "dist",
-    "rootDir": "src",
-
+    "rootDir": "./",
+    "baseUrl": ".",
     "incremental": true,
     "skipLibCheck": true,
 
@@ -25,8 +25,12 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "paths": {
+      "@/*": ["src/*"],
+      "@test/*": ["test/*"]
+    }
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "include": ["src/**/*.ts", "test/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }
