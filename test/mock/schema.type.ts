@@ -1,5 +1,5 @@
 /** biome-ignore-all lint/style/useNamingConvention: <testing> */
-import type { Include, SchemaModel } from '@/type'
+import type { SchemaModel } from '@/type'
 
 export type Database = {
   user: {
@@ -26,11 +26,16 @@ export interface MockModel extends SchemaModel {
   Include: []
 }
 
+const include = [
+  {
+    child: 'post',
+    on: ['userId', 'id'],
+    include: [{ child: 'comment', on: ['postId', 'id'] }],
+  },
+] as const
+
 export interface MockModelIncludes extends SchemaModel {
   Database: Database
   Name: 'user'
-  Include: [
-    Include<Database, 'post', 'user'>,
-    Include<Database, 'comment', 'user'>,
-  ]
+  Include: typeof include
 }

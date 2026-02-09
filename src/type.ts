@@ -19,28 +19,37 @@ export type Include<
   Parent extends TableName<Database>,
 > = {
   child: Child
-  on: readonly [keyof Database[Child], keyof Database[Parent]]
-  include?: Array<AnyInclude<Database, Child>>
+  readonly on: readonly [keyof Database[Child], keyof Database[Parent]]
+  readonly include?: readonly AnyInclude<Database, Child>[]
 }
 
-export type SubSelect<Database, Name extends TableName<Database>, Include> =
-  Include extends Array<AnyInclude<Database, Name>>
-    ? {
-        [Child in Include[number] as Child['child']]?:
-          | true
-          | { select: Select<Database, Child['child'], Child['include']> }
-      }
-    : never
+export type SubSelect<
+  Database,
+  Name extends TableName<Database>,
+  Include,
+> = Include extends readonly AnyInclude<Database, Name>[]
+  ? {
+      [Child in Include[number] as Child['child']]?:
+        | true
+        | {
+            select: Select<
+              Database,
+              Child['child'],
+              Child['include'] extends readonly any[] ? Child['include'] : {}
+            >
+          }
+    }
+  : never
 
 export type Select<Database, Name extends TableName<Database>, Include> = {
   [K in keyof Database[Name]]?: true
-} & (Include extends Array<any> ? SubSelect<Database, Name, Include> : {})
+} & (Include extends readonly any[] ? SubSelect<Database, Name, Include> : {})
 
 // Schema
 export interface SchemaModel {
   Database: any
   Name: string
-  Include: Array<any>
+  readonly Include: readonly any[]
 }
 
 export type SchemaContext<Model extends SchemaModel> = {

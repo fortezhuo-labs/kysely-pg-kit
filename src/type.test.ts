@@ -84,8 +84,8 @@ describe('AnyInclude', () => {
 describe('Include', () => {
   type Expected = {
     child: 'post'
-    on: readonly [keyof Database['post'], keyof Database['user']]
-    include?: Array<AnyInclude<Database, 'post'>>
+    readonly on: readonly [keyof Database['post'], keyof Database['user']]
+    readonly include?: readonly AnyInclude<Database, 'post'>[]
   }
   it('return include of table parent "user" and child "post"', () => {
     type Test = Include<Database, 'post', 'user'>
@@ -160,8 +160,8 @@ describe('Schema', () => {
     it('resolves both flat column keys and nested relational select keys', () => {
       type Test = SchemaSelect<MockModelIncludes>
       type TestChild = Extract<Test['post'], { select: any }>
-      type Expected = 'id' | 'name' | 'post' | 'comment'
-      type ExpectedChild = 'id' | 'title' | 'userId'
+      type Expected = 'id' | 'name' | 'post'
+      type ExpectedChild = 'id' | 'title' | 'userId' | 'comment'
 
       expectTypeOf<keyof Test>().toEqualTypeOf<Expected>()
       expectTypeOf<keyof TestChild['select']>().toEqualTypeOf<ExpectedChild>()
@@ -176,9 +176,17 @@ describe('Schema', () => {
         db: Kysely<Database>
         config: {
           name: 'user'
-          include?: [
-            Include<Database, 'post', 'user'>,
-            Include<Database, 'comment', 'user'>,
+          include?: readonly [
+            {
+              readonly child: 'post'
+              readonly on: readonly ['userId', 'id']
+              readonly include: readonly [
+                {
+                  readonly child: 'comment'
+                  readonly on: readonly ['postId', 'id']
+                },
+              ]
+            },
           ]
         }
       }
