@@ -8,7 +8,7 @@ import type { AnyInclude, TableName } from './type'
 export function createModelFactory<D>(db: Kysely<D>) {
   return <
     const N extends TableName<D>,
-    const I extends Array<AnyInclude<D, N>>,
+    const I extends Array<AnyInclude<D, N>> = [],
   >(config: {
     name: N
     include?: I
@@ -18,7 +18,11 @@ export function createModelFactory<D>(db: Kysely<D>) {
       config,
     }
 
-    type Model = { Database: D; Name: N; Include: I }
+    type Model = {
+      Database: D
+      Name: N
+      Include: I
+    }
 
     return {
       _ctx: ctx,
