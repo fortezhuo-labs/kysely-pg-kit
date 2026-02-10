@@ -2,48 +2,50 @@
 /** biome-ignore-all lint/complexity/noBannedTypes: <generic> */
 /** biome-ignore-all lint/style/useNamingConvention: <generic> */
 
-import type { Kysely } from 'kysely'
+import type { Kysely, SelectQueryBuilder } from 'kysely'
 
 // helper
-export type Prop<M, K extends keyof M> = M[K]
+export type Prop<Record, Key extends keyof Record> = Record[Key]
 
-export type TableName<Database> = keyof Database & string
+export type TableName<TDatabase> = keyof TDatabase & string
 
-export type AnyInclude<Database, Parent extends TableName<Database>> = {
-  [A in TableName<Database>]: Include<Database, A, Parent>
-}[TableName<Database>]
+export type AnyInclude<TDatabase, TParent extends TableName<TDatabase>> = {
+  [A in TableName<TDatabase>]: Include<TDatabase, A, TParent>
+}[TableName<TDatabase>]
 
 export type Include<
-  Database,
-  Child extends TableName<Database>,
-  Parent extends TableName<Database>,
+  TDatabase,
+  TChild extends TableName<TDatabase>,
+  TParent extends TableName<TDatabase>,
 > = {
-  child: Child
-  readonly on: readonly [keyof Database[Child], keyof Database[Parent]]
-  readonly include?: readonly AnyInclude<Database, Child>[]
+  child: TChild
+  readonly on: readonly [keyof TDatabase[TChild], keyof TDatabase[TParent]]
+  readonly include?: readonly AnyInclude<TDatabase, TChild>[]
 }
 
 export type SubSelect<
-  Database,
-  Name extends TableName<Database>,
-  Include,
-> = Include extends readonly AnyInclude<Database, Name>[]
+  TDatabase,
+  TName extends TableName<TDatabase>,
+  TInclude,
+> = TInclude extends readonly AnyInclude<TDatabase, TName>[]
   ? {
-      [Child in Include[number] as Child['child']]?:
+      [TChild in TInclude[number] as TChild['child']]?:
         | true
         | {
             select: Select<
-              Database,
-              Child['child'],
-              Child['include'] extends readonly any[] ? Child['include'] : {}
+              TDatabase,
+              TChild['child'],
+              TChild['include'] extends readonly any[] ? TChild['include'] : {}
             >
           }
     }
   : never
 
-export type Select<Database, Name extends TableName<Database>, Include> = {
-  [K in keyof Database[Name]]?: true
-} & (Include extends readonly any[] ? SubSelect<Database, Name, Include> : {})
+export type Select<TDatabase, TName extends TableName<TDatabase>, TInclude> = {
+  [K in keyof TDatabase[TName]]?: true
+} & (TInclude extends readonly any[]
+  ? SubSelect<TDatabase, TName, TInclude>
+  : {})
 
 // Schema
 export interface SchemaModel {
@@ -52,16 +54,19 @@ export interface SchemaModel {
   readonly Include: readonly any[]
 }
 
-export type SchemaContext<Model extends SchemaModel> = {
-  db: Kysely<Prop<Model, 'Database'>>
+export type SchemaContext<TModel extends SchemaModel> = {
+  db: Kysely<Prop<TModel, 'Database'>>
   config: {
-    name: Prop<Model, 'Name'>
-    include?: Prop<Model, 'Include'>
+    name: Prop<TModel, 'Name'>
+    include?: Prop<TModel, 'Include'>
   }
 }
 
-export type SchemaSelect<Model extends SchemaModel> = Select<
-  Prop<Model, 'Database'>,
-  Prop<Model, 'Name'>,
-  Prop<Model, 'Include'>
+export type SchemaSelect<TModel extends SchemaModel> = Select<
+  Prop<TModel, 'Database'>,
+  Prop<TModel, 'Name'>,
+  Prop<TModel, 'Include'>
 >
+
+export type SchemaSelectQueryBuilder<TModel extends SchemaModel> =
+  SelectQueryBuilder<Prop<TModel, 'Database'>, Prop<TModel, 'Name'>, any>

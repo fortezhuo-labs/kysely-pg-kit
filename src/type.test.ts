@@ -6,7 +6,7 @@ import type {
   MockModelIncludes,
 } from '@test/mock/schema.type'
 
-import type { Kysely } from 'kysely'
+import type { Kysely, SelectQueryBuilder } from 'kysely'
 import { describe, expectTypeOf, it } from 'vitest'
 import type {
   AnyInclude,
@@ -14,6 +14,7 @@ import type {
   Prop,
   SchemaContext,
   SchemaSelect,
+  SchemaSelectQueryBuilder,
   Select,
   SubSelect,
   TableName,
@@ -166,6 +167,16 @@ describe('Schema', () => {
 
       expectTypeOf<keyof Test>().toEqualTypeOf<Expected>()
       expectTypeOf<keyof TestChild['select']>().toEqualTypeOf<ExpectedChild>()
+    })
+  })
+
+  /* SchemaSelectQueryBuilder */
+  describe('SchemaSelectQueryBuilder', () => {
+    it('resolve keyof kysely`s SelectQueryBuilder', () => {
+      type Test = SchemaSelectQueryBuilder<MockModel>
+      type Expected = keyof SelectQueryBuilder<any, any, any>
+
+      expectTypeOf<keyof Test>().toEqualTypeOf<Expected>()
     })
   })
 
