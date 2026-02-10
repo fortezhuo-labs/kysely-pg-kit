@@ -21,7 +21,8 @@
     "testcontainers": "11.11.0",
     "tsup": "8.5.1",
     "typescript": "5.9.3",
-    "vitest": "4.0.18"
+    "vitest": "4.0.18",
+    "tsx": "^4.21.0"
   },
   "peerDependencies": {
     "kysely": ">=0.27.0"

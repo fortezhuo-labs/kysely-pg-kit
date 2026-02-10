@@ -30,7 +30,7 @@
       },
       "style": {
         "useBlockStatements": "error",
-        "useNamingConvention": "warn"
+        "useNamingConvention": "off"
       }
     }
   },
