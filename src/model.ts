@@ -2,7 +2,7 @@
 /** biome-ignore-all lint/style/useNamingConvention: <generic> */
 
 import type { Kysely } from 'kysely'
-import { findManyFactory } from './query/findMany'
+import { findManyFactory } from './query/find-many'
 import type { AnyInclude, TableName } from './type'
 
 export function createModelFactory<D>(db: Kysely<D>) {

@@ -2,7 +2,7 @@
 import type { MockModel, MockModelIncludes } from '@test/mock/schema.type'
 import { describe, expectTypeOf, it } from 'vitest'
 import type { SchemaContext } from '@/type'
-import { findManyFactory } from './findMany'
+import { findManyFactory } from './find-many'
 
 describe('findManyFactory', () => {
   it('basic table without include', () => {
@@ -23,24 +23,5 @@ describe('findManyFactory', () => {
     type Expected = 'id' | 'name' | 'post' | 'profile'
 
     expectTypeOf<keyof Test>().toEqualTypeOf<Expected>()
-
-    /*
-    findMany({
-      select: {
-        id: true,
-        name: true,
-        post: {
-          select: {
-            title: true,
-            comment: {
-              select: {
-                body: true,
-              },
-            },
-          },
-        },
-      },
-    })
-      */
   })
 })
