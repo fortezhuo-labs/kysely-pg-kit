@@ -4,14 +4,9 @@ import type {
   SchemaModel,
   SchemaSelectQueryBuilder,
 } from '@/type'
-import { getParentTable, getRelationTable } from '@/util'
+import { getParentTable } from './get-parent-table'
+import { getRelationTable } from './get-relation'
 import type { SelectArg } from './type'
-
-export function selectFrom<Model extends SchemaModel>(
-  ctx: SchemaContext<Model>,
-): SchemaSelectQueryBuilder<Model> {
-  return ctx.db.selectFrom(ctx.config.name) as any
-}
 
 export function applySelect<
   Model extends SchemaModel,

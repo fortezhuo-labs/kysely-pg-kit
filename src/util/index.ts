@@ -1,10 +1,4 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: <ignore> */
-import type { SchemaContext, SchemaModel } from '../type'
-
+export * from './apply-select'
+export * from './get-parent-table'
 export * from './get-relation'
-
-export function getParentTable<Model extends SchemaModel>(
-  ctx: SchemaContext<Model>,
-) {
-  return ctx.config.name
-}
+export * from './select-from'
