@@ -7,6 +7,13 @@ export type Database = {
     name: string
   }
 
+  profile: {
+    id: number
+    userId: string
+    email: string
+    phone: string
+  }
+
   post: {
     id: number
     userId: number
@@ -31,6 +38,10 @@ const include = [
     child: 'post',
     on: ['userId', 'id'],
     include: [{ child: 'comment', on: ['postId', 'id'] }],
+  },
+  {
+    child: 'profile',
+    on: ['userId', 'id'],
   },
 ] as const
 

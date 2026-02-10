@@ -20,7 +20,7 @@ describe('findManyFactory', () => {
     const findMany = findManyFactory(mockCtx)
 
     type Test = Parameters<typeof findMany>[0]['select']
-    type Expected = 'id' | 'name' | 'post'
+    type Expected = 'id' | 'name' | 'post' | 'profile'
 
     expectTypeOf<keyof Test>().toEqualTypeOf<Expected>()
 

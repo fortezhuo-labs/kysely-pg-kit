@@ -44,7 +44,7 @@ describe('Prop', () => {
 describe('TableName', () => {
   it('returns union of table keys', () => {
     type Test = TableName<Database>
-    type Expected = 'user' | 'post' | 'comment'
+    type Expected = 'user' | 'post' | 'comment' | 'profile'
     expectTypeOf<Test>().toEqualTypeOf<Expected>()
   })
 
@@ -67,6 +67,7 @@ describe('AnyInclude', () => {
   type Expected =
     | Include<Database, 'user', 'user'>
     | Include<Database, 'post', 'user'>
+    | Include<Database, 'profile', 'user'>
     | Include<Database, 'comment', 'user'>
   it('return union of includes of table "user"', () => {
     type Test = AnyInclude<Database, 'user'>
@@ -160,7 +161,7 @@ describe('Schema', () => {
     it('resolves both flat column keys and nested relational select keys', () => {
       type Test = SchemaSelect<MockModelIncludes>
       type TestChild = Extract<Test['post'], { select: any }>
-      type Expected = 'id' | 'name' | 'post'
+      type Expected = 'id' | 'name' | 'post' | 'profile'
       type ExpectedChild = 'id' | 'title' | 'userId' | 'comment'
 
       expectTypeOf<keyof Test>().toEqualTypeOf<Expected>()
@@ -186,6 +187,10 @@ describe('Schema', () => {
                   readonly on: readonly ['postId', 'id']
                 },
               ]
+            },
+            {
+              readonly child: 'profile'
+              readonly on: readonly ['userId', 'id']
             },
           ]
         }
