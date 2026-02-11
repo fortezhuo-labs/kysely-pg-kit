@@ -2,13 +2,14 @@
 
 import { applySelect, selectFrom } from '@/util'
 import type { FindManyArgs } from '@/util/type'
-import type { SchemaContext, SchemaModel } from '../type'
+import type { Prop, SchemaContext, SchemaModel } from '../type'
 
-export function findManyFactory<Model extends SchemaModel>(
-  ctx: SchemaContext<Model>,
-) {
-  return (args: FindManyArgs<Model>) => {
-    let q = selectFrom(ctx)
+export function findManyFactory<
+  TModel extends SchemaModel,
+  TName extends Prop<TModel, 'Name'>,
+>(ctx: SchemaContext<TModel>) {
+  return (args: FindManyArgs<TModel, TName>) => {
+    let q = selectFrom(ctx, ctx.config.name as TName)
     q = applySelect(ctx, q, args)
     return q
   }

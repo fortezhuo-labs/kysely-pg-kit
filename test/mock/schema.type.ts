@@ -33,7 +33,7 @@ export interface MockModel extends SchemaModel {
   Include: []
 }
 
-const include = [
+export const include = [
   {
     child: 'post',
     on: ['userId', 'id'],

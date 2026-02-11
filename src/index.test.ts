@@ -20,7 +20,7 @@ describe('KyselyPgKit', () => {
       include: [],
     })
 
-    expect(userModel._ctx.config.name).toBe('user')
+    expect(userModel.ctx.config.name).toBe('user')
     expect(userModel.findMany).toBeDefined()
   })
 })

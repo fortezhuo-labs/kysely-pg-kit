@@ -1,4 +1,4 @@
-import type { Database } from '@test/mock/schema.type'
+import { type Database, include } from '@test/mock/schema.type'
 import type { Kysely } from 'kysely'
 import { describe, expectTypeOf, it } from 'vitest'
 import { createModelFactory } from './model'
@@ -10,19 +10,19 @@ describe('createModelFactory', () => {
   it('correctly infers the model structure and binds it to findMany', () => {
     const userModel = createModel({
       name: 'user',
-      include: [{ child: 'post', on: ['userId', 'id'] }],
+      include,
     })
     type UserModel = typeof userModel
 
     /* Name */
-    type TestName = UserModel['_ctx']['config']['name']
+    type TestName = UserModel['ctx']['config']['name']
     type ExpectedName = 'user'
     expectTypeOf<TestName>().toEqualTypeOf<ExpectedName>()
 
     /* FindMany */
     type FindManyArgs = Parameters<UserModel['findMany']>[0]
     type TestFindMany = keyof FindManyArgs['select']
-    type ExpectedFindMany = 'post' | keyof Database['user']
+    type ExpectedFindMany = 'profile' | 'post' | keyof Database['user']
 
     expectTypeOf<TestFindMany>().toEqualTypeOf<ExpectedFindMany>()
   })

@@ -3,12 +3,12 @@
 
 import type { Kysely } from 'kysely'
 import { findManyFactory } from './query/find-many'
-import type { AnyInclude, TableName } from './type'
+import type { AnyInclude, Prop, TableName } from './type'
 
 export function createModelFactory<D>(db: Kysely<D>) {
   return <
     const N extends TableName<D>,
-    const I extends Array<AnyInclude<D, N>> = [],
+    const I extends readonly AnyInclude<D, N>[] = [],
   >(config: {
     name: N
     include?: I
@@ -25,8 +25,8 @@ export function createModelFactory<D>(db: Kysely<D>) {
     }
 
     return {
-      _ctx: ctx,
-      findMany: findManyFactory<Model>(ctx),
+      ctx,
+      findMany: findManyFactory<Model, Prop<Model, 'Name'>>(ctx),
     }
   }
 }

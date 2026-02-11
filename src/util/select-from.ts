@@ -3,10 +3,15 @@ import type {
   SchemaContext,
   SchemaModel,
   SchemaSelectQueryBuilder,
+  SchemaTable,
 } from '@/type'
 
-export function selectFrom<Model extends SchemaModel>(
-  ctx: SchemaContext<Model>,
-): SchemaSelectQueryBuilder<Model> {
-  return ctx.db.selectFrom(ctx.config.name) as any
+export function selectFrom<
+  TModel extends SchemaModel,
+  TName extends SchemaTable<TModel>,
+>(
+  ctx: SchemaContext<TModel>,
+  name: TName,
+): SchemaSelectQueryBuilder<TModel, TName> {
+  return ctx.db.selectFrom(name) as any
 }

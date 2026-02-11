@@ -1,7 +1,13 @@
-import type { SchemaModel, SchemaSelect } from '@/type'
+import type { SchemaModel, SchemaSelect, SchemaTable } from '@/type'
 
-export type SelectArg<Model extends SchemaModel> = {
-  select: SchemaSelect<Model>
+export type SelectArg<
+  TModel extends SchemaModel,
+  TName extends SchemaTable<TModel>,
+> = {
+  select: SchemaSelect<TModel, TName>
 }
 
-export type FindManyArgs<Model extends SchemaModel> = SelectArg<Model>
+export type FindManyArgs<
+  TModel extends SchemaModel,
+  TName extends SchemaTable<TModel>,
+> = SelectArg<TModel, TName>

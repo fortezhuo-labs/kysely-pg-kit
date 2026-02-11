@@ -153,14 +153,14 @@ describe('Schema', () => {
   /* SchemaSelect */
   describe('SchemaSelect', () => {
     it('resolves single table select keys', () => {
-      type Test = SchemaSelect<MockModel>
+      type Test = SchemaSelect<MockModel, 'user'>
       type Expected = 'id' | 'name'
 
       expectTypeOf<keyof Test>().toEqualTypeOf<Expected>()
     })
 
     it('resolves both flat column keys and nested relational select keys', () => {
-      type Test = SchemaSelect<MockModelIncludes>
+      type Test = SchemaSelect<MockModelIncludes, 'user'>
       type TestChild = Extract<Test['post'], { select: any }>
       type Expected = 'id' | 'name' | 'post' | 'profile'
       type ExpectedChild = 'id' | 'title' | 'userId' | 'comment'
@@ -173,7 +173,7 @@ describe('Schema', () => {
   /* SchemaSelectQueryBuilder */
   describe('SchemaSelectQueryBuilder', () => {
     it('resolve keyof kysely`s SelectQueryBuilder', () => {
-      type Test = SchemaSelectQueryBuilder<MockModel>
+      type Test = SchemaSelectQueryBuilder<MockModel, 'user'>
       type Expected = keyof SelectQueryBuilder<any, any, any>
 
       expectTypeOf<keyof Test>().toEqualTypeOf<Expected>()

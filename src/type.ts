@@ -62,11 +62,16 @@ export type SchemaContext<TModel extends SchemaModel> = {
   }
 }
 
-export type SchemaSelect<TModel extends SchemaModel> = Select<
-  Prop<TModel, 'Database'>,
-  Prop<TModel, 'Name'>,
-  Prop<TModel, 'Include'>
+export type SchemaSelect<
+  TModel extends SchemaModel,
+  TName extends SchemaTable<TModel>,
+> = Select<Prop<TModel, 'Database'>, TName, Prop<TModel, 'Include'>>
+
+export type SchemaTable<TModel extends SchemaModel> = TableName<
+  Prop<TModel, 'Database'>
 >
 
-export type SchemaSelectQueryBuilder<TModel extends SchemaModel> =
-  SelectQueryBuilder<Prop<TModel, 'Database'>, Prop<TModel, 'Name'>, any>
+export type SchemaSelectQueryBuilder<
+  TModel extends SchemaModel,
+  TName extends SchemaTable<TModel>,
+> = SelectQueryBuilder<Prop<TModel, 'Database'>, TName, any>
